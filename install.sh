@@ -9,6 +9,7 @@ git config --global commit.gpgsign true
 git config --global tag.gpgsign true
 git config --global pull.rebase false
 git config --global init.defaultBranch main
+git config --global core.editor "vim"
 
 # Install stuff
 sudo apt update
