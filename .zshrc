@@ -53,7 +53,7 @@ line() {
   code --goto $dir/tmp.js:$(echo $1 | cut -d: -f3-4)
 }
 
-alias yarn='npx yarn@1.21.1'
+alias yarn='npx -y yarn@1.21.1'
 
 revoke_gh() {
   curl \
