@@ -40,13 +40,29 @@ curl https://github.com/ogham/exa/releases/download/v0.10.1/exa-linux-x86_64-v0.
 unzip exa.zip bin/exa
 sudo mv bin/exa /usr/local/bin
 
+# starship
+curl -sS https://starship.rs/install.sh | sh
+
 # cleanup
 rm -rf exa.zip
 rm -rf bin
 rm -rf age
 rm -rf linux-amd64-1.1.0
+
+# Everything else
 sudo apt update
 sudo apt install direnv autojump thefuck prettyping git gh --yes
+
+# Set up default node
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+nvm install $(node -v) || true
+nvm use --delete-prefix $(node -v) || true
+nvm alias default $(node -v)
+
+# Configure bash to spawn zsh
+echo "zsh || true" >> ~/.bashrc
+echo "exit" >> ~/.bashrc
 {{ end -}}
 
 yarn global add @electron/build-tools npmrc
