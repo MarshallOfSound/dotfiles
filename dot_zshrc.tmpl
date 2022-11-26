@@ -1,0 +1,80 @@
+eval "$(starship init zsh)"
+
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+{{- if (eq .chezmoi.os "darwin") }}
+# Keychain based SSH passkey
+/usr/bin/ssh-add --apple-load-keychain >/dev/null 2>&1
+# Add homebrew to PATH
+export PATH=$PATH:/opt/homebrew/bin:/opt/homebrew/sbin
+{{- end }}
+
+# Add yarn add cargo bin entries to PATH
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$HOME/.cargo/env:$PATH"
+# Add ~/.local/bin to PATH
+export PATH="$HOME/.local/bin:$PATH"
+
+# ZSH plugins
+source $HOME/.config/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $HOME/.config/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $HOME/.config/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+
+[ -f /opt/homebrew/etc/profile.d/autojump.sh ] && . /opt/homebrew/etc/profile.d/autojump.sh
+
+zstyle ':completion:*' menu select
+# Shift+Tab to cycle backwards
+bindkey '^[[Z' reverse-menu-complete
+# History up / down arrow keys
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+
+eval $(thefuck --alias)
+
+if [ "$TERM_PROGRAM" != "vscode" ]; then
+    archey
+fi
+
+# heroku autocomplete setup
+HEROKU_AC_ZSH_SETUP_PATH=/Users/sattard/Library/Caches/heroku/autocomplete/zsh_setup && test -f $HEROKU_AC_ZSH_SETUP_PATH && source $HEROKU_AC_ZSH_SETUP_PATH;
+
+# Aliases
+eval "$(direnv hook zsh)"
+alias cat=ccat
+alias ping=prettyping
+alias ls=exa
+{{ if (eq .chezmoi.os "darwin") }}
+adhoc_sign() {
+	codesign --sign - --force --preserve-metadata=entitlements,requirements,flags,runtime --deep $1
+}
+mischiefmanaged() {
+	xattr -d com.apple.quarantine $1
+}
+uptonogood() {
+  application="You"
+  date=$(printf %x $(date +%s))
+  uuid=$(/usr/bin/uuidgen)
+  /usr/bin/xattr -w com.apple.quarantine "0002;${date};${application};${uuid}" "$1"
+}
+{{- end }}
+ccp() {
+  git config core.hooksPath '/dev/null/'
+  git cherry-pick --continue
+  git config --unset core.hooksPath
+}
+revoke_gh() {
+  curl \
+    -X DELETE \
+    -vv \
+    -H "Accept: application/vnd.github.v3+json" \
+    -H "Authorization: token $1" https://api.github.com/installation/token
+}
+line() {
+  dir=$(mktemp -d -t line-XXXXXXXX)
+  curl --compressed $(echo $1 | cut -d: -f1-2) -o $dir/tmp.js
+  code --goto $dir/tmp.js:$(echo $1 | cut -d: -f3-4)
+}
+
+source $HOME/.cargo/env

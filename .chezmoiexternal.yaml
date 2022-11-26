@@ -1,0 +1,28 @@
+".config/zsh/plugins/zsh-syntax-highlighting":
+  type: archive
+  url: "https://github.com/zsh-users/zsh-syntax-highlighting/archive/master.tar.gz"
+  stripComponents: 1
+  exact: true
+
+".config/zsh/plugins/zsh-autosuggestions":
+  type: archive
+  url: "https://github.com/zsh-users/zsh-autosuggestions/archive/master.tar.gz"
+  stripComponents: 1
+  exact: true
+
+".config/zsh/plugins/zsh-history-substring-search":
+  type: archive
+  url: "https://github.com/zsh-users/zsh-history-substring-search/archive/master.tar.gz"
+  stripComponents: 1
+  exact: true
+
+# Downloads all the variants of Fira Code Nerd Font
+{{- if (eq .chezmoi.os "darwin") }}
+{{-   range $_, $face := list "Regular" "Light" "Medium" "Bold" "Retina" "SemiBold" -}}
+{{-     range $_, $variant := list "" " Mono" }}
+"Library/Fonts/Fira Code {{ $face }} Nerd Font Complete{{ $variant }}.ttf":
+  type: file
+  url: "https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/FiraCode/{{ $face }}/complete/Fira%20Code%20{{ $face }}%20Nerd%20Font%20Complete{{ $variant | replace " " "%20" }}.ttf"
+{{      end -}}
+{{-   end -}}
+{{- end }}

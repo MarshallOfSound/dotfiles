@@ -1,0 +1,31 @@
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+[core]
+	pager = less -+FX
+	editor = vim
+	excludesfile = /Users/sattard/.gitignore_global
+	ignorecase = true
+	fsmonitor = true
+	untrackedcache = true
+[user]
+	name = Samuel Attard
+{{- if (hasSuffix "salesforce.com" .chezmoi.fqdnHostname) }}
+	email = sattard@salesforce.com
+{{- else }}
+  email = samuel.r.attard@gmail.com
+{{- end }}
+[commit]
+	gpgsign = true
+[tag]
+	gpgsign = true
+[pull]
+	rebase = false
+[init]
+	defaultBranch = main
+[push]
+	default = simple
+[fetch]
+	prune = true
