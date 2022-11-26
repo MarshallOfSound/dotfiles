@@ -1,4 +1,8 @@
+{{- $codespaces:= env "CODESPACES" | not | not -}}
+
 encryption = "age"
+[data]
+    codespaces = {{ $codespaces }}
 [age]
     identity = "~/key.txt"
     recipient = "age133ryc4xrt9mnhyzskg4aqvlpgxftsp8p870l856t5syn2sss9p2sfsejk5"
