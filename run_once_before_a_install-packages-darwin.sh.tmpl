@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# Install / Update NVM
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
+
+# Install / Update Cargo
+curl https://sh.rustup.rs -sSf | sh -s -- -y
+
+{{ if (eq .chezmoi.os "darwin") -}}
+# Install / Update brew pkgs
+brew bundle --no-lock --file=/dev/stdin <<EOF
+brew "age"
+brew "direnv"
+brew "starship"
+brew "yarn"
+brew "autojump"
+brew "thefuck"
+tap "heroku/brew"
+brew "heroku"
+brew "ccat"
+brew "prettyping"
+brew "exa"
+brew "git"
+brew "gh"
+EOF
+{{ end -}}
+{{ if (eq .chezmoi.os "linux" ) -}}
+# age
+curl --compressed https://dl.filippo.io/age/latest?for=linux/amd64 -L | tar xvz
+sudo mv age
+sudo mv age/age /usr/local/bin
+sudo mv age/age-keygen /usr/local/bin
+
+# ccat
+curl --compressed https://github.com/owenthereal/ccat/releases/download/v1.1.0/linux-amd64-1.1.0.tar.gz -L | tar xvz
+sudo mv linux-amd64-1.1.0/ccat /usr/local/bin
+
+# exa
+curl https://github.com/ogham/exa/releases/download/v0.10.1/exa-linux-x86_64-v0.10.1.zip -L -o exa.zip
+unzip exa.zip bin/exa
+sudo mv bin/exa /usr/local/bin
+
+# cleanup
+rm -rf exa.zip
+rm -rf bin
+rm -rf age
+rm -rf linux-amd64-1.1.0
+sudo apt update
+sudo apt install direnv autojump thefuck prettyping git gh --yes
+{{ end -}}
+
+yarn global add @electron/build-tools npmrc
+npmrc default
