@@ -41,7 +41,7 @@ unzip exa.zip bin/exa
 sudo mv bin/exa /usr/local/bin
 
 # starship
-curl -sS https://starship.rs/install.sh | sh
+curl -sS https://starship.rs/install.sh | sh -s -- -y
 
 # cleanup
 rm -rf exa.zip
@@ -55,7 +55,7 @@ sudo apt install direnv autojump thefuck prettyping git gh --yes
 
 # Set up default node
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
 nvm install $(node -v) || true
 nvm use --delete-prefix $(node -v) || true
 nvm alias default $(node -v)

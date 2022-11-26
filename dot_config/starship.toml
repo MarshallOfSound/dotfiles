@@ -25,7 +25,7 @@ style_root = "bg:#9A348E"
 format = '[$user ]($style)'
 
 [custom.context]
-command = "echo ${SHELL_CONTEXT:-$USER@local}"
+command = "[[ \"$CODESPACES\" == \"true\" ]] && echo \" $RepositoryName\" || echo ${SHELL_CONTEXT:-$USER@local}"
 style = "bg:#9A348E"
 format = "[$output ]($style)"
 when = true
